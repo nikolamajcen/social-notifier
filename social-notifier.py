@@ -7,14 +7,14 @@ from api.twitter_api import TwitterAPI
 class SocialNotifier():
 
     def __init__(self, filename):
-        self.__credentialsFilename = filename
+        self.__credentials_filename = filename
 
     def start(self):
-        twitterCredentials = TwitterCredentials(self.__credentialsFilename)
-        credentials = twitterCredentials.getCredentials()
+        twitter_credentials = TwitterCredentials(self.__credentials_filename)
+        credentials = twitter_credentials.get_credentials()
 
-        twitterApi = TwitterAPI(credentials)
-        twitterApi.searchTweets("nikolamajcen")
+        twitter_api = TwitterAPI(credentials)
+        twitter_api.search_tweets("nikolamajcen")
 
 
 if __name__ == "__main__":
