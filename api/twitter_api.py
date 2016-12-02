@@ -18,7 +18,7 @@ class TwitterAPI:
         request = requests.get(url, params=params, auth=auth)
         hashtags = []
         for json_hashtag in reversed(request.json()["statuses"]):
-            hashtag = TwitterHashtag(json_hashtag)
+            hashtag = TwitterPost(json_hashtag)
             hashtags.append(hashtag)
         return hashtags
 
@@ -31,6 +31,6 @@ class TwitterAPI:
         request = requests.get(url, params=params, auth=auth)
         tweets = []
         for json_tweet in reversed(request.json()):
-            tweet = TwitterTweet(json_tweet)
+            tweet = TwitterPost(json_tweet)
             tweets.append(tweet)
         return tweets

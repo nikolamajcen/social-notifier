@@ -14,12 +14,19 @@ class FacebookAPI:
     def search_posts(self, username):
         user_id = self.__fetch_user_details(username)
         if user_id is None:
+            print "Token is expired."
             return None
 
+        print user_id
         graph = facebook.GraphAPI(access_token=self.access_token)
-        batched_requests = '[{"method": "GET", "relative_url": "' + user_id +  '/feed"}]'
-        posts_data = graph.request("", post_args={"batch": batched_requests})[0]
-        for key, value in posts_data.items():
+        batched_requests = '[{"method": "GET", "relative_url": "' + user_id + '/feed"}]'
+
+        try:
+            posts_data = graph.request("", post_args={"batch": batched_requests})
+        except:
+            print "Token has expired."
+
+        for key, value in posts_data[0].items():
             if key == "body":
                 json_posts = json.loads(value)["data"]
                 break
@@ -33,8 +40,15 @@ class FacebookAPI:
     def __fetch_user_details(self, username):
         graph = facebook.GraphAPI(access_token=self.access_token)
         batched_requests = '[ {"method": "GET", "relative_url":  "' + username + '"} ]'
-        user_data = graph.request("", post_args={"batch": batched_requests})[0]
-        for key, value in user_data.items():
+        try:
+            user_data = graph.request("", post_args={"batch": batched_requests})
+        except:
+            return None
+
+        if user_data is None:
+            return None
+
+        for key, value in user_data[0].items():
             user = FacebookUser(json.loads(value))
             break
         return user.id
