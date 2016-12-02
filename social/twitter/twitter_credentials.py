@@ -10,11 +10,11 @@ class TwitterCredentials:
         self.filename = filename
 
     def get_credentials(self):
-        jsonData = self.__read_configuration_file()
-        api_key = jsonData["twitter"]["api_key"]
-        api_key_secret = jsonData["twitter"]["api_key_secret"]
-        access_token = jsonData["twitter"]["access_token"]
-        access_token_secret = jsonData["twitter"]["access_token_secret"]
+        json_data = self.__read_configuration_file()
+        api_key = json_data["twitter"]["api_key"]
+        api_key_secret = json_data["twitter"]["api_key_secret"]
+        access_token = json_data["twitter"]["access_token"]
+        access_token_secret = json_data["twitter"]["access_token_secret"]
         return api_key, api_key_secret, access_token, access_token_secret
 
     def __read_configuration_file(self):

@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import facebook
 import json
-from models.facebook_models import *
+
+import facebook
+
+from social.facebook.facebook_models import *
 
 
 class FacebookAPI:

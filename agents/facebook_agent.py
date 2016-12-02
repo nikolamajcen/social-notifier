@@ -1,11 +1,13 @@
 #! /usr/bin/usr python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timedelta
+
 from spade import Agent
 from spade import Behaviour
-from datetime import datetime, timedelta
-from api.facebook_api import *
-from credentials.facebook_credentials import *
+
+from social.facebook.facebook_api import FacebookAPI
+from social.facebook.facebook_credentials import FacebookCredentials
 
 
 class FacebookAgent(Agent.Agent):

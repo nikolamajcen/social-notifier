@@ -3,7 +3,8 @@
 
 import requests
 import requests_oauthlib
-from models.twitter_models import *
+
+from social.twitter.twitter_models import *
 
 
 class TwitterAPI:

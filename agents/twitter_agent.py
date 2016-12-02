@@ -1,10 +1,13 @@
 #! /usr/bin/usr python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timedelta
+
 from spade import Agent
 from spade import Behaviour
-from api.twitter_api import *
-from credentials.twitter_credentials import *
+
+from social.twitter.twitter_api import TwitterAPI
+from social.twitter.twitter_credentials import TwitterCredentials
 
 
 class TwitterFetchAgent(Agent.Agent):

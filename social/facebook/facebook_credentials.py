@@ -10,8 +10,8 @@ class FacebookCredentials:
         self.filename = filename
 
     def get_credentials(self):
-        jsonData = self.__read_configuration_file()
-        api_key = jsonData["facebook"]["access_token"]
+        json_data = self.__read_configuration_file()
+        api_key = json_data["facebook"]["access_token"]
         return api_key
 
     def __read_configuration_file(self):
