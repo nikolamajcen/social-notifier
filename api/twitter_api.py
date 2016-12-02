@@ -2,6 +2,7 @@
 
 import requests
 import requests_oauthlib
+from models.twitter_models import *
 
 
 class TwitterAPI:
@@ -14,7 +15,11 @@ class TwitterAPI:
         params = {"q": hashtag, "result_type": "recent", "since_id": since_id}
         auth = requests_oauthlib.OAuth1(*self.__credentials)
         request = requests.get(url, params=params, auth=auth)
-        return request.json()
+        hashtags = []
+        for json_hashtag in request.json()["statuses"]:
+            hashtag = TwitterHashtag(json_hashtag)
+            hashtags.append(hashtag)
+        return hashtags
 
     def search_tweets(self, username, since_id=0):
         url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
@@ -23,4 +28,8 @@ class TwitterAPI:
             params["since_id"] = since_id
         auth = requests_oauthlib.OAuth1(*self.__credentials)
         request = requests.get(url, params=params, auth=auth)
-        return request.json()
+        tweets = []
+        for json_tweet in request.json():
+            tweet = TwitterTweet(json_tweet)
+            tweets.append(tweet)
+        return tweets

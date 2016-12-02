@@ -4,7 +4,7 @@
 import json
 
 
-class TwitterUser():
+class TwitterTweet():
 
     def __init__(self, data):
         self.created_at = data["created_at"]

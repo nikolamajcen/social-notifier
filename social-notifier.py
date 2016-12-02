@@ -13,8 +13,8 @@ class SocialNotifier():
         self.credentials_filename = filename
 
     def start(self):
-        # self.__twitter_search()
-        self.__facebook_search()
+        self.__twitter_search()
+        #self.__facebook_search()
 
     def __twitter_search(self):
         twitter_credentials = TwitterCredentials(self.credentials_filename)
@@ -22,25 +22,23 @@ class SocialNotifier():
 
         # User activity search
         print "TWEET SEARCH"
-        data = twitter_api.search_tweets("kimkardashian")
-        for element in data:
-            a = TwitterUser(element)
-            print "Name: " + a.name
-            print "Username: " + a.username
-            print "Created at: " + a.created_at + "(" + a.location + ")"
-            print "Text: " + a.text
+        tweets = twitter_api.search_tweets("kimkardashian")
+        for tweet in tweets:
+            print "Name: " + tweet.name
+            print "Username: " + tweet.username
+            print "Created at: " + tweet.created_at + "(" + tweet.location + ")"
+            print "Text: " + tweet.text
             print ""
         print ""
 
         # Hashtag search
         print "HASHTAG SEARCH"
-        data = twitter_api.search_hashtag("#python")["statuses"]
-        for element in data:
-            a = TwitterHashtag(element)
-            print "Name: " + a.name
-            print "Username: " + a.username
-            print "Created at: " + a.created_at + " (" + a.location + ")"
-            print "Text: " + a.text
+        hashtags = twitter_api.search_hashtag("#python")
+        for hashtag in hashtags:
+            print "Name: " + hashtag.name
+            print "Username: " + hashtag.username
+            print "Created at: " + hashtag.created_at + " (" + hashtag.location + ")"
+            print "Text: " + hashtag.text
             print ""
 
     def __facebook_search(self):
