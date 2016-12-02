@@ -17,7 +17,7 @@ class TwitterAPI:
         auth = requests_oauthlib.OAuth1(*self.__credentials)
         request = requests.get(url, params=params, auth=auth)
         hashtags = []
-        for json_hashtag in request.json()["statuses"]:
+        for json_hashtag in reversed(request.json()["statuses"]):
             hashtag = TwitterHashtag(json_hashtag)
             hashtags.append(hashtag)
         return hashtags
@@ -30,7 +30,7 @@ class TwitterAPI:
         auth = requests_oauthlib.OAuth1(*self.__credentials)
         request = requests.get(url, params=params, auth=auth)
         tweets = []
-        for json_tweet in request.json():
+        for json_tweet in reversed(request.json()):
             tweet = TwitterTweet(json_tweet)
             tweets.append(tweet)
         return tweets

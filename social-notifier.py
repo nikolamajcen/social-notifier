@@ -6,6 +6,7 @@ from credentials.facebook_credentials import FacebookCredentials
 from api.twitter_api import TwitterAPI
 from api.facebook_api import FacebookAPI
 from datetime import datetime
+from agents import fetch_agent
 
 
 class SocialNotifier():
@@ -14,8 +15,11 @@ class SocialNotifier():
         self.credentials_filename = filename
 
     def start(self):
-        self.__twitter_search()
-        self.__facebook_search()
+        #self.__twitter_search()
+        #self.__facebook_search()
+
+        agent = fetch_agent.TwitterFetchAgent("agent@127.0.0.1", "secret", keyword="nikolamajcen", time=120, period=15)
+        agent.start()
 
     def __twitter_search(self):
         twitter_credentials = TwitterCredentials(self.credentials_filename)

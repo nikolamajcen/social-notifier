@@ -12,5 +12,5 @@ setup(
     author='Nikola Majcen',
     author_email='',
     description='Agent based social notifier',
-    requires=['requests', 'requests_oauthlib', 'facebook-sdk']
+    requires=['spade', 'requests', 'requests_oauthlib', 'facebook-sdk']
 )
