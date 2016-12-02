@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+#! /usr/bin/usr python
+# -*- coding: utf-8 -*-
 
 import json
 

@@ -1,6 +1,8 @@
 # ! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 
 class FacebookUser:
 
@@ -18,8 +20,7 @@ class FacebookStatus:
 
     def __init__(self, data):
         self.status_type = data["status_type"]
-        self.updated_time = data["updated_time"]
-
+        self.date = datetime.strptime(data["updated_time"], "%Y-%m-%dT%H:%M:%S+0000")
         if "message" in data:
             self.message = data["message"].strip()
         else:

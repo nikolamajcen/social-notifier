@@ -1,13 +1,13 @@
 #! /usr/bin/usr python
 # -*- coding: utf-8 -*-
 
-import json
+from datetime import datetime
 
 
-class TwitterTweet():
+class TwitterTweet:
 
     def __init__(self, data):
-        self.created_at = data["created_at"]
+        self.date = datetime.strptime(data["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
         self.since_id = data["id_str"]
         self.text = data["text"]
         self.username = data["user"]["screen_name"]
@@ -15,10 +15,10 @@ class TwitterTweet():
         self.location = data["user"]["location"]
 
 
-class TwitterHashtag():
+class TwitterHashtag:
 
     def __init__(self, data):
-        self.created_at = data["created_at"]
+        self.date = datetime.strptime(data["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
         self.since_id = data["id_str"]
         self.text = data["text"]
         self.hashtag = data["entities"]["hashtags"][0]["text"]

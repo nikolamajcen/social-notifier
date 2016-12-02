@@ -1,9 +1,10 @@
 #! /usr/bin/usr python
+# -*- coding: utf-8 -*-
 
 import json
 
 
-class FacebookCredentials():
+class FacebookCredentials:
 
     def __init__(self, filename):
         self.filename = filename

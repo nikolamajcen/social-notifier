@@ -4,10 +4,9 @@
 import facebook
 import json
 from models.facebook_models import *
-import pprint
 
 
-class FacebookAPI():
+class FacebookAPI:
 
     def __init__(self, access_token):
         self.access_token = access_token
