@@ -2,12 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
+import json
 
 from spade import Agent
 from spade import Behaviour
+from spade import AID
+from spade import ACLMessage
 
 from social.twitter.twitter_api import TwitterAPI
 from social.twitter.twitter_credentials import TwitterCredentials
+from social.shared import report_message
 
 
 class TwitterFetchAgent(Agent.Agent):
@@ -28,6 +32,8 @@ class TwitterFetchAgent(Agent.Agent):
             print self.myAgent.fetch_type.capitalize() + " activity fetch ended."
 
         def _onTick(self):
+
+
             if self.periods > 0:
                 self.periods -= 1
                 self.__fetch_data()
@@ -43,14 +49,18 @@ class TwitterFetchAgent(Agent.Agent):
                 results = self.twitter_api.search_hashtag(self.myAgent.keyword)
 
             for tweet in results:
-                if (tweet.date - self.current_date) > timedelta(seconds=1):
+                if True:#(tweet.date - self.current_date) > timedelta(seconds=1):
                     self.current_date = tweet.date
-                    # TODO: Notify report agent
-                    print "Name: " + tweet.name
-                    print "Username: " + tweet.username
-                    print "Created at: " + datetime.strftime(tweet.date, "%a %b %d %H:%M:%S %Y") + " (" + tweet.location + ")"
-                    print "Text: " + tweet.text
-                    print ""
+                    receiver = AID.aid(name="reporter@127.0.0.1", addresses=["xmpp://reporter@127.0.0.1"])
+                    message = ACLMessage.ACLMessage()
+                    message.addReceiver(receiver)
+                    message.setOntology("notify")
+                    object = report_message.ReportMessage("Twitter", self.myAgent.fetch_type, self.myAgent.keyword,
+                                                          "some_username", "some_name", str(datetime.now()), "some_message")
+                    value = json.dumps(object.__dict__)
+                    message.setContent(value)
+                    self.myAgent.send(message)
+                    break
 
     def __init__(self, agentjid, password, keyword, fetch_type="tweet",
                  credentials_filename="credentials.json", time=60, period=10):

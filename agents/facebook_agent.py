@@ -41,6 +41,7 @@ class FacebookAgent(Agent.Agent):
             for status in results:
                 if (status.date - self.current_date) > timedelta(seconds=1):
                     self.current_date = status.date
+
                     # TODO: Notify report agent
                     print "Name: " + status.name
                     print "Username: " + status.username
