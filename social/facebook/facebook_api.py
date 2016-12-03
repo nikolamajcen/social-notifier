@@ -14,7 +14,7 @@ class FacebookAPI:
         self.access_token = access_token
 
     def search_posts(self, username):
-        user_id = self.__fetch_user_details(username)
+        user_id, user_username, user_name = self.__fetch_user_details(username)
         if user_id is None:
             print "Token is expired."
             return None
@@ -36,6 +36,8 @@ class FacebookAPI:
         posts = []
         for json_post in json_posts:
             post = FacebookStatus(json_post)
+            post.username = user_username
+            post.name = user_name
             posts.append(post)
         return posts
 
@@ -53,4 +55,4 @@ class FacebookAPI:
         for key, value in user_data[0].items():
             user = FacebookUser(json.loads(value))
             break
-        return user.id
+        return user.id, user.username, user.name
