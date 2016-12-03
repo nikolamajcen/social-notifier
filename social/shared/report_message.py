@@ -14,7 +14,6 @@ class ReportMessage:
         self.text = text
 
     def load_json(self,data):
-        print data
         self.network = data["network"]
         self.message_type = data["message_type"]
         self.keyword = data["keyword"]
