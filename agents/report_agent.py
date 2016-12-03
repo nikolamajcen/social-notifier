@@ -27,7 +27,6 @@ class ReportAgent(Agent.Agent):
     class NotifyBehaviour(Behaviour.EventBehaviour):
 
         def _process(self):
-            print "notify"
             received_message = self._receive()
             if received_message:
                 content = received_message.getContent()
