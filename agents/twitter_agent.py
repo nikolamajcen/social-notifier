@@ -11,7 +11,7 @@ from spade import ACLMessage
 
 from social.twitter.twitter_api import TwitterAPI
 from social.twitter.twitter_credentials import TwitterCredentials
-from social.shared import report_message
+from social.shared.report_message import ReportMessage
 
 
 class TwitterFetchAgent(Agent.Agent):
@@ -67,8 +67,8 @@ class TwitterFetchAgent(Agent.Agent):
             message = ACLMessage.ACLMessage()
             message.addReceiver(self.myAgent.receiver)
             message.setOntology("notify")
-            object = report_message.ReportMessage("Twitter", self.myAgent.fetch_type, self.myAgent.keyword,
-                                                  tweet.username, tweet.name, str(datetime.now()), tweet.text)
+            object = ReportMessage("Twitter", self.myAgent.fetch_type, self.myAgent.keyword,
+                                   tweet.username, tweet.name, str(datetime.now()), tweet.text)
             value = json.dumps(object.__dict__)
             message.setContent(value)
             self.myAgent.send(message)
@@ -79,6 +79,27 @@ class TwitterFetchAgent(Agent.Agent):
             message.setOntology("report")
             message.setContent(self.myAgent.getName())
             self.myAgent.send(message)
+
+    class ReportDeliveryBehaviour(Behaviour.EventBehaviour):
+
+        def _process(self):
+            received_message = self._receive()
+            if received_message:
+                content = json.loads(received_message.getContent())
+                print ""
+                print "[" + self.myAgent.getName() + "] Received message from: " + received_message.getSender().getName()
+                print "[" + self.myAgent.getName() + "] Total number of fetched data: " + str(len(content))
+                for element in content:
+                    notify_message = ReportMessage()
+                    notify_message.load_json(element)
+                    print "[" + self.myAgent.getName() + "] Network: " + notify_message.network
+                    print "[" + self.myAgent.getName() + "] Type: " + notify_message.message_type
+                    print "[" + self.myAgent.getName() + "] Keyword: " + notify_message.keyword
+                    print "[" + self.myAgent.getName() + "] Name: " + notify_message.name
+                    print "[" + self.myAgent.getName() + "] Username: " + notify_message.username
+                    print "[" + self.myAgent.getName() + "] Created at: " + notify_message.date
+                    print "[" + self.myAgent.getName() + "] Text: " + notify_message.text
+                    print ""
 
     def __init__(self, agentjid, password, keyword, fetch_type="tweet",
                  credentials_filename="credentials.json", time=60, period=10):
@@ -94,3 +115,7 @@ class TwitterFetchAgent(Agent.Agent):
         print "[" + self.getName() + "] Twitter fetch agent is starting..."
         fetch_behaviour = self.FetchBehaviour(self.time, self.period, self.credentials_filename)
         self.addBehaviour(fetch_behaviour)
+
+        delivery_template = Behaviour.ACLTemplate()
+        delivery_template.setOntology("report_delivery")
+        self.addBehaviour(self.ReportDeliveryBehaviour(), delivery_template)
