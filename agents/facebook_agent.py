@@ -97,13 +97,14 @@ class FacebookAgent(Agent.Agent):
                     print "[" + self.myAgent.getName() + "] Text: " + notify_message.text
                     print ""
 
-    def __init__(self, agentjid, password, keyword, credentials_filename="credentials.json", time=60, period=10):
-        Agent.Agent.__init__(self, agentjid, password)
+    def __init__(self, reporter_name, keyword, credentials_filename="credentials.json", time=60, period=10):
+        agent_id, password = self.__generate_agent_credentials()
+        Agent.Agent.__init__(self, agent_id, password)
         self.keyword = keyword
         self.credentials_filename = credentials_filename
         self.time = time
         self.period = period
-        self.receiver = AID.aid(name="reporter@127.0.0.1", addresses=["xmpp://reporter@127.0.0.1"])
+        self.receiver = AID.aid(name=reporter_name, addresses=["xmpp://" + reporter_name])
 
     def _setup(self):
         print "[" + self.getName() + "] Facebook fetch agent is starting..."
@@ -113,3 +114,7 @@ class FacebookAgent(Agent.Agent):
         delivery_template = Behaviour.ACLTemplate()
         delivery_template.setOntology("report_delivery")
         self.addBehaviour(self.ReportDeliveryBehaviour(), delivery_template)
+
+    def __generate_agent_credentials(self):
+        agent_name = "facebook_" + datetime.now().strftime("%H%M%S") + "@127.0.0.1"
+        return agent_name, "secret"

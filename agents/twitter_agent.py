@@ -101,15 +101,16 @@ class TwitterFetchAgent(Agent.Agent):
                     print "[" + self.myAgent.getName() + "] Text: " + notify_message.text
                     print ""
 
-    def __init__(self, agentjid, password, keyword, fetch_type="tweet",
+    def __init__(self, reporter_name, keyword, fetch_type="tweet",
                  credentials_filename="credentials.json", time=60, period=10):
-        Agent.Agent.__init__(self, agentjid, password)
+        agent_id, password = self.__generate_agent_credentials()
+        Agent.Agent.__init__(self, agent_id, password)
         self.keyword = keyword
         self.fetch_type = fetch_type
         self.credentials_filename = credentials_filename
         self.time = time
         self.period = period
-        self.receiver = AID.aid(name="reporter@127.0.0.1", addresses=["xmpp://reporter@127.0.0.1"])
+        self.receiver = AID.aid(name=reporter_name, addresses=["xmpp://" + reporter_name])
 
     def _setup(self):
         print "[" + self.getName() + "] Twitter fetch agent is starting..."
@@ -119,3 +120,7 @@ class TwitterFetchAgent(Agent.Agent):
         delivery_template = Behaviour.ACLTemplate()
         delivery_template.setOntology("report_delivery")
         self.addBehaviour(self.ReportDeliveryBehaviour(), delivery_template)
+
+    def __generate_agent_credentials(self):
+        agent_name = "twitter_" + datetime.now().strftime("%H%M%S") + "@127.0.0.1"
+        return agent_name, "secret"

@@ -22,22 +22,22 @@ class SocialNotifier:
 
         # Reporter
         reporter_parser = subparsers.add_parser("reporter", help="Creates social reporter")
-        reporter_parser.add_argument("config", action="store", default="config.json", help="Configuration filename")
+        reporter_parser.add_argument("-config", default="config.json", action="store", help="Configuration filename")
 
         # Twitter
         twitter_parser = subparsers.add_parser("twitter", help="Creates a Twitter fetch agent")
         twitter_parser.add_argument("credentials", action="store", help="Credentials filename")
-        twitter_parser.add_argument("-config", action="store", default="config.json", help="Configuration filename")
-        twitter_parser.add_argument("-type", default="tweet", action="store", help="Defines search type ('tweet' or 'hashtag')")
-        twitter_parser.add_argument("-keyword", action="store", help="Defines search keyword (username or hashtag)")
+        twitter_parser.add_argument("type", action="store", help="Defines search type ('tweet' or 'hashtag')")
+        twitter_parser.add_argument("keyword", action="store", help="Defines search keyword (username or hashtag)")
+        twitter_parser.add_argument("-config", default="config.json", action="store", help="Configuration filename")
         twitter_parser.add_argument("-time", default=120, action="store", help="Length of agent lifetime in secods")
         twitter_parser.add_argument("-period", default=15, action="store", help="Lenght of period in seconds")
 
         # Facebook
         facebook_parser = subparsers.add_parser("facebook", help="Creates a Facebook fetch agent")
         facebook_parser.add_argument("credentials", action='store', help="Credentials filename")
-        facebook_parser.add_argument("-config", action="store", default="config.json", help="Configuration filename")
-        facebook_parser.add_argument("-keyword", action="store", help="Defines search keyword (username)")
+        facebook_parser.add_argument("keyword", action="store", help="Defines search keyword (username)")
+        facebook_parser.add_argument("-config", default="config.json", action="store", help="Configuration filename")
         facebook_parser.add_argument("-time", default=120, help="Length of agent lifetime in secods")
         facebook_parser.add_argument("-period", default=15, help="Lenght of period in seconds")
 
@@ -61,21 +61,21 @@ class SocialNotifier:
             sys.exit("Error: Problem with parameters.")
 
     def __start_reporter(self, result):
-        name, password = self.__get_reporter_info(result.config)
+        name, password = self.__read_config_file(result.config)
         reporter = ReportAgent(name, password)
         reporter.start()
 
     def __start_twitter_fetch(self, result):
-        # TODO: Add reporter name to constructor
-        agent = TwitterFetchAgent("agent@127.0.0.1", "secret", result.keyword, result.type, result.credentials, result.time, result.period)
+        reporter_name, _ = self.__read_config_file(result.config)
+        agent = TwitterFetchAgent(reporter_name, result.keyword, result.type, result.credentials, result.time, result.period)
         agent.start()
 
     def __start_facebook_fetch(self, result):
-        # TODO: Add reporter name to constructor
-        agent = FacebookAgent("agent@127.0.0.1", "secret", result.keyword, result.time, result.period)
+        reporter_name, _ = self.__read_config_file(result.config)
+        agent = FacebookAgent(reporter_name, result.keyword, result.time, result.period)
         agent.start()
 
-    def __get_reporter_info(self, filename):
+    def __read_config_file(self, filename):
         file = open(filename, "r")
         json_data = json.load(file)
         agent_name = json_data["agent_name"]
