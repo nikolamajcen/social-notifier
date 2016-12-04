@@ -1,6 +1,8 @@
 #! /usr/bin/usr python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 
 class ReportMessage:
 
@@ -10,7 +12,10 @@ class ReportMessage:
         self.keyword = keyword
         self.username = username
         self.name = name
-        self.date = date
+        if date:
+            self.date = date.strftime("%H:%M:%S, %d.%m.%Y")
+        else:
+            self.date = date
         self.text = text
 
     def load_json(self,data):
@@ -21,3 +26,13 @@ class ReportMessage:
         self.name = data["name"]
         self.date = data["date"]
         self.text = data["text"]
+
+    def print_message(self):
+        print "network=" + self.network + "; type=" + self.message_type + "; keyword=" + self.keyword
+        print "username=" + self.username + "; name=" + self.name
+        print "date=" + self.date
+        if self.text == "":
+            print "message=<empty_message>"
+        else:
+            print "message=" + self.text.replace("\n", " ").replace("\r", "")
+        print ""

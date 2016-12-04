@@ -64,7 +64,7 @@ class FacebookAgent(Agent.Agent):
             message.addReceiver(self.myAgent.receiver)
             message.setOntology("notify")
             object = ReportMessage("Facebook", post.status_type, self.myAgent.keyword,
-                                   post.username, post.name, str(datetime.now()), post.message + " (" + post.link + ")")
+                                   post.username, post.name, post.date, post.message + " (" + post.link + ")")
             value = json.dumps(object.__dict__)
             message.setContent(value)
             self.myAgent.send(message)
@@ -85,17 +85,11 @@ class FacebookAgent(Agent.Agent):
                 print ""
                 print "[" + self.myAgent.getName() + "] Received message from: " + received_message.getSender().getName()
                 print "[" + self.myAgent.getName() + "] Total number of fetched data: " + str(len(content))
+                print ""
                 for element in content:
                     notify_message = ReportMessage()
                     notify_message.load_json(element)
-                    print "[" + self.myAgent.getName() + "] Network: " + notify_message.network
-                    print "[" + self.myAgent.getName() + "] Type: " + notify_message.message_type
-                    print "[" + self.myAgent.getName() + "] Keyword: " + notify_message.keyword
-                    print "[" + self.myAgent.getName() + "] Name: " + notify_message.name
-                    print "[" + self.myAgent.getName() + "] Username: " + notify_message.username
-                    print "[" + self.myAgent.getName() + "] Created at: " + notify_message.date
-                    print "[" + self.myAgent.getName() + "] Text: " + notify_message.text
-                    print ""
+                    notify_message.print_message()
 
     def __init__(self, reporter_name, keyword, credentials_filename="credentials.json", time=60, period=10):
         agent_id, password = self.__generate_agent_credentials()

@@ -19,10 +19,9 @@ class ReportAgent(Agent.Agent):
             received_message = self._receive()
             if received_message:
                 agent_name = received_message.getContent()
-                self.myAgent.agents.append(agent_name)
                 self.myAgent.reports[agent_name] = []
                 print "[" + self.myAgent.getName() + "] New agent (" + agent_name + ") started fetching."
-            print "[" + self.myAgent.getName() + "] No. of agents working: " + str(len(self.myAgent.agents))
+            print "[" + self.myAgent.getName() + "] No. of agents working: " + str(len(self.myAgent.reports))
 
     class NotifyBehaviour(Behaviour.EventBehaviour):
 
@@ -34,14 +33,7 @@ class ReportAgent(Agent.Agent):
                 notify_message.load_json(json.loads(content))
                 self.myAgent.reports[received_message.getSender().getName()].append(notify_message)
                 print "[" + self.myAgent.getName() + "] Received message from: " + received_message.getSender().getName()
-                print "[" + self.myAgent.getName() + "] Network: " + notify_message.network
-                print "[" + self.myAgent.getName() + "] Type: " + notify_message.message_type
-                print "[" + self.myAgent.getName() + "] Keyword: " + notify_message.keyword
-                print "[" + self.myAgent.getName() + "] Name: " + notify_message.name
-                print "[" + self.myAgent.getName() + "] Username: " + notify_message.username
-                print "[" + self.myAgent.getName() + "] Created at: " + notify_message.date
-                print "[" + self.myAgent.getName() + "] Text: " + notify_message.text
-                print ""
+                notify_message.print_message()
 
     class ReportBehaviour(Behaviour.EventBehaviour):
 
@@ -49,12 +41,11 @@ class ReportAgent(Agent.Agent):
             received_message = self._receive()
             if received_message:
                 agent_name = received_message.getContent()
-                if agent_name in self.myAgent.agents:
+                if agent_name in self.myAgent.reports:
                     self.send_report(agent_name)
-                    self.myAgent.agents.remove(agent_name)
                     del(self.myAgent.reports[agent_name])
                     print  "[" + self.myAgent.getName() + "] Agent (" + agent_name + ") stopped fetching."
-            print "[" + self.myAgent.getName() + "] No. of agents working: " + str(len(self.myAgent.agents))
+            print "[" + self.myAgent.getName() + "] No. of agents working: " + str(len(self.myAgent.reports))
 
         def send_report(self, agent_name):
             report_messages = self.myAgent.reports[agent_name]
@@ -67,7 +58,6 @@ class ReportAgent(Agent.Agent):
 
     def _setup(self):
         print "[" + self.getName() + "] Report agent is online."
-        self.agents = []
         self.reports = {}
 
         register_template = Behaviour.ACLTemplate()
