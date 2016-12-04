@@ -90,6 +90,7 @@ class FacebookAgent(Agent.Agent):
                     notify_message = ReportMessage()
                     notify_message.load_json(element)
                     notify_message.print_message()
+            self.myAgent.stop()
 
     def __init__(self, reporter_name, keyword, credentials_filename="credentials.json", time=60, period=10):
         agent_id, password = self.__generate_agent_credentials()

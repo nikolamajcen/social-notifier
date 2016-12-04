@@ -94,6 +94,7 @@ class TwitterFetchAgent(Agent.Agent):
                     notify_message = ReportMessage()
                     notify_message.load_json(element)
                     notify_message.print_message()
+            self.myAgent.stop()
 
     def __init__(self, reporter_name, keyword, fetch_type="tweet",
                  credentials_filename="credentials.json", time=60, period=10):
