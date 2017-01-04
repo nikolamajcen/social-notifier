@@ -34,7 +34,7 @@
 
 Tema ovog seminarskog rada je praćenje aktivnosti na društvenim mrežama pomoću reaktivnih agenata, odnosno izrada jednostavne aplikacije gdje se pomoću agenata mogu pratiti objave na društvenim mrežama u realnom vremenu.
 
-Seminarski rad uključuje teorijsku obradu agenata, ali praktični prikaz i implementaciju rješenja koje je vezano za praćenje aktivnosti na društvenim mrežama Twitter i Facebook. Praćenje na društvenim mrežama uključuje praćenje statusa i hashtag-ova. Rad je podjeljen na cjeline i to:
+Seminarski rad uključuje teorijsku obradu agenata, ali praktični prikaz i implementaciju rješenja koje je vezano za praćenje aktivnosti na društvenim mrežama Twitter i Facebook. Praćenje na društvenim mrežama uključuje praćenje statusa i/ili hashtag-ova. Rad je podjeljen na cjeline i to:
 
 \begin{itemize}
 \item{Opis zadatka}
@@ -46,9 +46,198 @@ Seminarski rad uključuje teorijsku obradu agenata, ali praktični prikaz i impl
 % Opis zadatka
 \chapter{Opis zadatka}
 
+Tema ovog seminarskog rada jest izrada aplikacije koja korisniku omogućuje da pretražuje određene društvene mreže preko hashtag-ova ili statusa, na način da se na iste pretplati te obrada literature vezane za reaktivne agente koji se koriste u samoj aplikaciji.
+
+\section{Koncept zadatka}
+Da bi korisnik mogao pretraživati određene društvene mreže, za početak je potrebno pretpostaviti koji će biti elementi pretrage i kako će se moći podaci pratiti. 
+
+U ovom zadatku će se koristiti društvene mreže Facebook i Twitter, gdje će se kod svake od njih pratiti određena aktivnost korisnika. Zbog određenih mjera privatnosti, nije bilo moguće izvesti iste funkcionalnosti za svaku od društvenih mreža, pa je shodno tome omogućeno sljedeće; za društvenu mrežu Facebook omogućeno je:
+
+\begin{itemize}
+\item{Praćenje statusa korisnika čiji su profili javni}
+\end{itemize}
+dok je za društvenu mrežu Twitter omogućeno sljedeće:
+\begin{itemize}
+\item{Praćenje statusa (tweet) svih korisnika (korisnički profil ne mora biti javan)}
+\item{Praćenje statusa (tweet) koji sadrže određeni hashtag}
+\end{itemize}
+
+Pretplata na promjenu statusa ili praćenje statusa sa određenim hashtag-om odvija se na način da korisnik definira vrijeme u sekundama u kojim će intervalima i kolko dugo pratiti promjene na određenoj društvenoj mreži. Detaljnije informacije o implementaciji zadatka i potrebnim dodatnih podacima za spajanje na određene društvene mreže nalaze se u sljedećem poglavlju.
+
+Za implementaciju rješenja ovog zadatka koristio sam višeagentni sustav koji se sastoji od dva, odnosno tri reaktivna agenta. Dva reaktivna agenta omogućuju pretraživanje i praćenje promjena na društvenim mrežama, a skupljene podatke šalju trećem agentu koji dohvaća sve promjene svih agenata. Za svaku društvenu mrežu definiran je posebni agent koji koristi specifične načine dohvata podataka za svaku od društvenih mreža. Nakon što određeni agent za dohvaćanje podataka s društvene mreže završi s radom, treći agent (koji sakuplja podatke) šalje izvještaj u obliku svih sakupljenih podataka koje mu je taj agent poslao. Na taj način završava praćenje i izvještavanje za tog agenta, dok svi ostali nastavljaju s radom.
+
+\section{Prikaz znanstvenih članaka ili neki naziv cool :) teorijsko nešto :D}
+
+
 % Implementacija rješenja
 
 \chapter{Implementacija rješenja}
+
+U ovom poglavlju prikazat ću implementaciju rješenja za praćenje na društvenim mrežama. Za implementaciju je korišten programski jezik Python verzije 2.7. Kao biblioteka koja omogućuje rad s agentima korišten je SPADE.
+
+Za početak rada, potrebno je u izvornom direktoriju otvoriti datoteku \textit{config.json} te unutar nje definirati naziv i lozinku agenta izvjestitelja. Zadano ime agenta je \textit{reporter@127.0.0.1}, dok je lozinka \textit{secret}.
+
+Uz tu datoteku, postoji i datoteka \textit{credentials-sample.json}, koja predstavlja podatke koji su potrebni da bi se aplikacija mogla povezati sa određenom društvenom mrežom. Detaljnije informacije za unos podataka za svaku od društvenih mreža bit će prikazane u zasebnom poglavlju za svakog agenta posebno, ali prije korištenja potrebno je istu preimenovati u \textit{credentials.json}.
+
+\section{Implementacija Facebook agenta}
+
+Prije detaljnog objašnjavanja Facebook agenta, potrebno je prvo definirati potrebne podatke kako bi se aplikacija mogla povezati sa Facebook servisima. 
+Za to je potrebno otvoriti datoteku \textit{credentials.json} te unutar objekta \texttt{"facebook"} za ključ \texttt{"access\_token"} unijeti vrijednost tokena koja se dobije kada se kreira nova aplikacija unutar Facebook-ovog sučelja za razvijatelje aplikacija. Bez vrijdnosti \texttt{"access\_token"}-a nije moguće koristiti Facebook agenta.
+
+Prikaz implementacije podijeljen je na tri dijela, a prikazuju sljedeće:
+
+\begin{itemize}
+\item{implementaciju modela,}
+\item{implementaciju API-a}
+\item{implementaciju reaktivnog agenta}
+\end{itemize}
+
+\subsection{Prikaz implementacije modela}
+
+Kako bi se dohvatili podaci za spajanje na Facebook-ov servis, kreiran je model \textit{FacebookCredentials}, a sadrži sljedeće:
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/facebook/facebook_credentials.py}
+
+Model sadrži dvije metode; \textit{get\_credentials()} za dohvat podataka za spajanje na servis, te \textit{\_\_read\_configuration\_file()} koja omogućuje čitanje datoteke u kojem se nalaze podaci za spajanje na servis.
+
+Sljedeći modeli su \textit{FacebookUser} i \textit{FacebookStatus}:
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/facebook/facebook_models.py}
+
+Klasa \textit{FacebookUser} definira osnovne informacije o korisniku, kao što je njegov id, korisničko ime, ime i prezime te lokacija. Klasa \textit{FacebookStatus} definira osnovne informacije o statusu, a sadrži ime i prezime korisnika koji je objavio status, korisničko ime, tip statusa, vrijeme objave, te ovisno o tome da li se radi o tekstualnom statusu ili slici poruku odnosno poveznicu.
+
+\subsection{Prikaz implementacije API-a}
+
+Sljedeću stvar koju sam kreirao je Facebook API koji zapravo definira pozive metoda koje se spajaju na Facebook-ov službeni API te na temelju tih poziva se dobivaju određeni podaci koje korisnik traži.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/facebook/facebook_api.py}
+
+Klasa \textit{FacebookAPI} definira poziv za dohvaćanje novih statusa preko metode \texttt{search\_posts(username)}. Ova metoda na temelju korisničkog id-a traži nove statuse ili slike korisnika, te iste dohvaća i vraća kao rezultat. Prethodno navedena metoda mora obavezno imati id korisničkog računa potrebnog za dohvaćanje podataka, a kako bi se isti dobio, potrebno je pomoću metode \texttt{\_\_fetch\_user\_details(username)} dohvatiti korisnikov id.
+
+\subsection{Prikaz implementacije reaktivnog agenta}
+
+Ovdje ću prikazati konačnu implementaciju agenta koji na Facebook društvenoj mreži dohvaća promjene u smislu novih statusa koji uključuju tekst ili slike.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/agents/facebook_agent.py}
+
+Agent ima dvije podklase koje definiraju ponašanje agenta, a to su \textit{FetchBehaviour} i \textit{ReportDeliveryBehaviour}.
+
+\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} // TODO... Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod pokretanja šalje poruka registracije agentu izvjestitelju o Facebook agentu pomoću metode \texttt{\_\_send\_registration\_message()}  kako bi agent izvjestitelj mogao voditi evidenciju o njemu i njegovim podacima. U svakom periodu provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti se šalje zahtjev za provjerom da li se na Facebook servisu što promijenilo od zadnje provjere. To je omogućeno pomoću metode \texttt{fetch\_data()}. Nakon dohvaćanja podataka, ukoliko je bilo kakve promjene, dohvaćeni podaci se šalju agentu izvjestitelju pomoću metode \texttt{\_\_send\_status\_message()}.
+
+\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} // TODO... Sastoji se od samo jedne metode koja je definirana nadklasom \texttt{EventBehaviour}, a radi na način da očekuje poruku od agenta izvjestitelja, a kada ju dobije ju ispiše na ekran i završi s radom agenta.
+
+Konačno, sam agent \texttt{FacebookAgent} nasljeđuje klasu \texttt{Agent} te se time definiraju konstruktor i metoda \texttt{\_setup()}. Konstruktor je u ovom slučaju definiran drugačije od zadanog, pa je potrebno ručno pozvati konstuktor i proslijediti potrebne podatke. Podaci koje je potrebno proslijediti jesu korisničko ime i lozinka agenta, a to se generira pomoću metode \texttt{\_\_generate\_agent\_credentails()}.
+
+\section{Implementacija Twitter agenta}
+
+U ovom potpoglavlju prikazat ću način na koji sam implementirao Twitter agenta. Prije prikaza same implementacije, potrebno je naglasiti, kao i kod Facebook agenta, da je važno da se unutar datoteke \textit{credentials.json} unesu potrebne vrijednosti za \texttt{"api\_key"}, \texttt{"api\_key\_secret"}, \texttt{"access\_token"} i \texttt{"access\_token\_secret"}. Navedene podatke je moguće dobiti nakon što se kreira nova aplikacija unutar Twitter aplikacije u dijelu za razvijatelje aplikacija.
+
+\subsection{Prikaz implementacije modela}
+
+Za dobivanje podataka potrebnih za spajanje na Twitter-ov servis, koristio sam sljedeću klasu \textit{TwitterCredentials}. Pomoću metode \texttt{\_\_read\_configuration()} dohvaća se datoteka unutar koje se nalaze podaci o spajanju na Twitter servis, dok se pomoću metode \texttt{get\_credentials()} dohvaćaju navedeni podaci iz datoteke te vraćaju kao n-torka.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/twitter/twitter_credentials.py}
+
+Sljedeća klasa koja predstavlja model je \textit{TwitterPost}. Ova klasa sadrži osnovne podatke o statusu odnosno tweet-u, a to su redom; vrijeme objave, id posljednje objave, tekst statusa, korisničko ime, ime i prezime korisnika te lokacija.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/twitter/twitter_models.py}
+
+\subsection{Prikaz implementacije API-a}
+
+Sljedeće što je potrebno da bi Twitter agent radio i dohvaćao podatke je API koji definira metode pomoću kojih je moguće spajanje na Twitter servis. Na taj način se dobivaju podaci ovisno da li se radi o dohvaćanju statusa korisnika ili novih statusa na temelju hashtag-a.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/twitter/twitter_api.py}
+
+Definirane su dvije osnovne metode pomoću kojih se dohvaćaju podaci preko API-a. To su metode \texttt{search\_hashtag(hashtag, since\_id} i \texttt{search\_tweets(username, since\_id)}.
+
+Metoda \texttt{search\_hashtag(hashtag, since\_id)} traži sve statuse koji sadrže navedeni hashtag, a nastali su nakon prethodnog traženja od strane korisnika. Metoda \texttt{search\_tweets(username, since\_id(} traži nove statuse od određenog korisnika koji su nastali nakon zadnje pretrage. Obje metode nakon pozivanja vraćaju statuse koji su dohvaćeni.
+
+\subsection{Prikaz implementacije reaktivnog agenta}
+
+Ovdje ću prikazati konačnu implementaciju agenta koji na Twitter društvenoj mreži dohvaća promjene u smislu novih statusa od stane korisnika ili novih statusa koji sadrže definirani hashtag.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/agents/twitter_agent.py}
+
+Agent ima dvije podklase koje definiraju ponašanje agenta, a to su \textit{FetchBehaviour} i \textit{ReportDeliveryBehaviour}.
+
+\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} // TODO... Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod pokretanja šalje poruka registracije agentu izvjestitelju o Twitter agentu pomoću metode \texttt{\_\_send\_registration\_message()}  kako bi agent izvjestitelj mogao voditi evidenciju o njemu i njegovim podacima. U svakom periodu provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti se šalje zahtjev za provjerom da li se na Twitter servisu što promijenilo od zadnje provjere. Ovdje je važno spomenuti da se na temelju korisničkog unosa odnosno definiranja pretrage šalje različiti zahtjev, tj. poziva se različita metoda. Metoda koja se koristi za dohvaćanje novih podataka je \texttt{fetch\_data()} te ona poziva \texttt{self.twitter\_api.search\_tweets(username, since\_id)} ako je korisnik kao vrstu pretrage odabrao \textit{hashtag}, dok se u slučaju vrste pretrage \textit{tweet} poziva metoda \texttt{self.twitter\_api.search\_hashtags(hashtag, since\_id)}. Nakon što se podaci dohvate, isti se šalju agentu izvjestitelju.
+
+\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} // TODO... Sastoji se od samo jedne metode koja je definirana nadklasom \texttt{EventBehaviour}, a radi na način da očekuje poruku od agenta izvjestitelja, a kada ju dobije ju ispiše na ekran i završi s radom agenta.
+
+Konačno, sam agent \texttt{TwitterAgent} nasljeđuje klasu \texttt{Agent} te se time definiraju konstruktor i metoda \texttt{\_setup()}. Konstruktor je u ovom slučaju definiran drugačije od zadanog, pa je potrebno ručno pozvati konstuktor i proslijediti potrebne podatke. Podaci koje je potrebno proslijediti jesu korisničko ime i lozinka agenta, a to se generira pomoću metode \texttt{\_\_generate\_agent\_credentails()}.
+
+\section{Implementacija agenta za izvještaje}
+
+Važna stavka ovog rješenja je agent izvjestitelj. Ovaj agent zadužen je za prihvaćanje svih informacija koje dobije od agenata koji dohvaćaju podatke s društvenih mreža.
+
+Da bi agent mogao komunicirati s agentima (Facebook, Twitter), definirana je klasa koja predstavlja model poruke pomoću koje se šalju konačni rezultati odnosno izvještaj za određenog agenta.
+Klasa \textit{ReportMessage} sadrži informacije o poruci kao što je vrsta mreže koja predstavlja o kojem se agentu radi (Facebook ili Twitter), vrsti poruke koja predstavlja da li se radi o statusu ili slici, traženoj riječi, korisničkom imenu, imenu i prezimenu korisnika, datumu i sadržaju statusa.
+Također, pošto se radi o JSON tipu poruke koja služi za komunikaciju između agenata, potrebno je moći pročitati sadržaj, a za to služi metoda \texttt{load\_json(data)}. Uz to, definirana je metoda za ispis rezultata kako bi on bio definiran na razini modela, a naziv metode je \texttt{print\_message()}.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social/shared/report_message.py}
+
+Agent je implementiran u klasi \textit{ReportAgent} te ima tri podklase koje definiraju ponašanje agenta, a to su \textit{RegisterBehaviour}, \textit{NotifyBehaviour} i \textit{ReportBehaviour}.
+
+Sva tri ponašanja definirana su kao \texttt{EventBehaviour}, a nešto više o toj vrsti ponašanja rečeno je u ranijim poglavljima.
+
+\texttt{RegisterBehaviour} se sastoji od metode koja je definirana od strane nadklase \texttt{EventBehaviour}, a radi na način da dohvaća poruke od strane drugih agenata (Facebook, Twitter) te ih registrira na način da ih spremi u adresar (engl. dictionary). Pošto svaki od agenata ima drugačije ime, adresar je dobar način spremanja pošto ime kao ključ nikad neće biti isto.
+
+\texttt{NotifyBehaviour} se sastoji od metode koja je definirana od strane nadklase \texttt{EventBehaviour}, a radi na način da dohvaća poruke od strane drugih agenata (Facebook, Twitter). Ukoliko je poruka primljena, poruka se otpakira iz JSON formata u određeni model te se kao takva sprema u rječnik i ispisuje.
+
+\texttt{ReportBehaviour} se sastoji od metode koja je definirana od strane nadklase \texttt{EventBehaviour}, a radi na način da dohvaća poruke od strane drugih agenata (Facebook, Twitter). Navedeni agenti kada su pri kraju s radom šalju zahtjev za konačnim izvješćem od strane agenta izvjestitelja, pa agent dohvaća iz rječnika i šalje navedenom agentu. Nakon što se poslala poruka s podacima, isti se agent briše iz rječnika. Metoda pomoću koje se šalje poruka je \texttt{send\_report(agent\_name)}.
+
+Agent \texttt{ReportAgent} nasljeđuje klasu \texttt{Agent} te se time definiraju konstruktor i metoda \texttt{\_setup()}. Unutar ove metode potrebno je definirati predloške koji će biti primjenjeni za svako od navedenih ponašanja kako bi poruke stizale samo za navedena ponašanja.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/agents/report_agent.py}
+
+\section{Implementacija kreiranja agenata}
+
+Na kraju, vrijedi prikazati implementaciju klase \textit{SocialNotifier} unutar koje je definirano na koji način se pokreće program. Korištena je biblioteka \textit{argparse} koja omogućuje definiranje korištenja argumenata na vrlo jednostavan način, odnosno da se definira broj potrebnih argumenata, koliko je obaveznih te koliko opcionalnih argumenata i na kraju da se navedeni podaci vrlo lako koriste u daljnjem izvođenju programa. U programskom kodu je vidljivo da se definira \texttt{parser} koji obuhvaća tri načina unosa i to kao \texttt{reporter\_parser}, \texttt{twitter\_parser} i \texttt{facebook\_parser}. U ovisnosti o načinu pokretanja programa, pokrenut će se drugačiji agent i to:
+
+\begin{itemize}
+\item{ReportAgent}
+\item{FacebookAgent}
+\item{TwitterAgent}
+\end{itemize}
+
+Nakon provjere argumenata, provjerava se koja je od komandi unesena što predstavlja zapravo naziv prvog argumenta. Ukoliko je komanda unosa odgovarajuća, poziva se jedna od navedenih metoda ovisno u nazivu komande; \texttt{\_\_start\_reporter(result)} za pokretanje \textit{ReportAgent}-a, \texttt{\_\_start\_twitter\_fetch(result)} za pokretanje \textit{TwitterAgent}-a te \texttt{\_\_start\_facebook\_fetch(result)} za pokretanje \textit{FacebookAgent}-a.
+
+Posljednja metoda koja se nalazi u kodu jest \texttt{\_\_read\_config\_file(filename)} pomoću koje se dohvača sadržaj datoteke \textit{config.json} u kojoj se nalazi korisničko ime i lozinka agenta izvjestitelja.
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{commentstyle=\textit,language=python}
+\lstset{backgroundcolor=\color{lbcolor},rulecolor=}
+\lstinputlisting{/Users/nikolamajcen/Development/Python/social-notifier/social-notifier.py}
 
 % Demonstracija rješenja
 

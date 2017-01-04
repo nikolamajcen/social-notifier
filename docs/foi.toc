@@ -1,7 +1,19 @@
 \select@language {croatian}
 \contentsline {chapter}{\numberline {1}Uvod}{1}{chapter.1}
 \contentsline {chapter}{\numberline {2}Opis zadatka}{2}{chapter.2}
-\contentsline {chapter}{\numberline {3}Implementacija rje\IeC {\v s}enja}{3}{chapter.3}
-\contentsline {chapter}{\numberline {4}Demonstracija rje\IeC {\v s}enja}{4}{chapter.4}
-\contentsline {chapter}{\numberline {5}Zaklju\IeC {\v c}ak}{5}{chapter.5}
-\contentsline {chapter}{Bibliografija}{5}{chapter.5}
+\contentsline {section}{\numberline {2.1}Koncept zadatka}{2}{section.2.1}
+\contentsline {section}{\numberline {2.2}Prikaz znanstvenih \IeC {\v c}lanaka ili neki naziv cool :) teorijsko ne\IeC {\v s}to :D}{3}{section.2.2}
+\contentsline {chapter}{\numberline {3}Implementacija rje\IeC {\v s}enja}{4}{chapter.3}
+\contentsline {section}{\numberline {3.1}Implementacija Facebook agenta}{4}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Prikaz implementacije modela}{4}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Prikaz implementacije API-a}{6}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Prikaz implementacije reaktivnog agenta}{7}{subsection.3.1.3}
+\contentsline {section}{\numberline {3.2}Implementacija Twitter agenta}{11}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Prikaz implementacije modela}{11}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Prikaz implementacije API-a}{12}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Prikaz implementacije reaktivnog agenta}{13}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.3}Implementacija agenta za izvje\IeC {\v s}taje}{16}{section.3.3}
+\contentsline {section}{\numberline {3.4}Implementacija kreiranja agenata}{20}{section.3.4}
+\contentsline {chapter}{\numberline {4}Demonstracija rje\IeC {\v s}enja}{23}{chapter.4}
+\contentsline {chapter}{\numberline {5}Zaklju\IeC {\v c}ak}{24}{chapter.5}
+\contentsline {chapter}{Bibliografija}{24}{chapter.5}
