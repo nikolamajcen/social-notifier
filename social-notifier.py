@@ -72,7 +72,7 @@ class SocialNotifier:
 
     def __start_facebook_fetch(self, result):
         reporter_name, _ = self.__read_config_file(result.config)
-        agent = FacebookAgent(reporter_name, result.keyword, result.time, result.period)
+        agent = FacebookAgent(reporter_name, result.keyword, result.credentials, result.time, result.period)
         agent.start()
 
     def __read_config_file(self, filename):

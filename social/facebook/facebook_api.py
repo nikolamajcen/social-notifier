@@ -19,7 +19,6 @@ class FacebookAPI:
             print "Token is expired."
             return None
 
-        print user_id
         graph = facebook.GraphAPI(access_token=self.access_token)
         batched_requests = '[{"method": "GET", "relative_url": "' + user_id + '/feed"}]'
 
