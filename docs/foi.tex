@@ -70,7 +70,9 @@ Pretplata na promjenu statusa ili praćenje statusa sa određenim hashtag-om odv
 
 Za implementaciju rješenja ovog zadatka koristio sam višeagentni sustav koji se sastoji od dva, odnosno tri reaktivna agenta. Dva reaktivna agenta omogućuju pretraživanje i praćenje promjena na društvenim mrežama, a skupljene podatke šalju trećem agentu koji dohvaća sve promjene svih agenata. Za svaku društvenu mrežu definiran je posebni agent koji koristi specifične načine dohvata podataka za svaku od društvenih mreža. Nakon što određeni agent za dohvaćanje podataka s društvene mreže završi s radom, treći agent (koji sakuplja podatke) šalje izvještaj u obliku svih sakupljenih podataka koje mu je taj agent poslao. Na taj način završava praćenje i izvještavanje za tog agenta, dok svi ostali nastavljaju s radom.
 
-\section{Prikaz znanstvenih članaka ili neki naziv cool :) teorijsko nešto :D}
+\section{Višeagentni sustavi i njihova primjena u društvenim mrežama}
+
+\citep{ArandaPalanca2012} \citep{JonkerTreur2002} \citep{Lerman2008}
 
 
 % Implementacija rješenja
@@ -140,11 +142,11 @@ Ovdje ću prikazati konačnu implementaciju agenta koji na Facebook društvenoj 
 
 Agent ima dvije podklase koje definiraju ponašanje agenta, a to su \textit{FetchBehaviour} i \textit{ReportDeliveryBehaviour}.
 
-\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} // TODO... 
+\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} a ono funkcionira na način da u određenim vremenskim intervalima pokreće metodu \texttt{\_onTick()}. Vrijeme između dva pokretanja navedene metode definira se putem konstruktora klase \texttt{PeriodicBehaviour}. 
 
 Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod metode pokretanja \texttt{onStart()} šalje poruka registracije agentu izvjestitelju o Facebook agentu pomoću metode \texttt{\_\_send\_registration\_message()}. Na taj način agent izvjestitelj vodi evidenciju o prijavljenom agentu i njegovim podacima. U svakom periodu provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti, kada je broj perioda veći od 0, šalje se zahtjev za dohvaćanjem podataka sa Facebook servisa te se provjerava što promijenilo od zadnje provjere. To je omogućeno pomoću metode \texttt{fetch\_data()}. Nakon dohvaćanja podataka, ukoliko je bilo kakve promjene, dohvaćeni podaci se šalju agentu izvjestitelju pomoću metode \texttt{\_\_send\_status\_message()} te se tamo spremaju za daljnje korištenje.
 
-\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} // TODO... 
+\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} što predstavlja ponašanje koje je kreirano na način da se okida na neki događaj. Isto tako, potrebno je napomenuti da ovo ponašanje nije instancirano niti pokrenuto tako dugo dok ga ne okine određen događaj.
 
 Sastoji se od metode \texttt{\_process()} koja je definirana nadklasom \texttt{EventBehaviour}, a radi na način da očekuje poruku od agenta izvjestitelja. Kada ju dobije ispiše njen sadržaj na ekran i završi s radom agenta.
 
@@ -196,13 +198,9 @@ Ovdje ću prikazati konačnu implementaciju agenta koji na Twitter društvenoj m
 
 Agent ima dvije podklase koje definiraju ponašanje agenta, a to su \textit{FetchBehaviour} i \textit{ReportDeliveryBehaviour}.
 
-\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} // TODO... 
+\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour}. Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod pokretanja kod metode \texttt{onStart()} šalje poruka registracije agentu izvjestitelju o Twitter agentu pomoću metode \texttt{\_\_send\_registration\_message()}  kako bi agent izvjestitelj mogao voditi evidenciju o njemu i njegovim podacima. U svakom periodu u metodi \texttt{\_onTick()} provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti se šalje zahtjev za provjerom da li se na Twitter servisu što promijenilo od zadnje provjere. Ovdje je važno spomenuti da se na temelju korisničkog unosa odnosno definiranja pretrage šalje različiti zahtjev, tj. poziva se različita metoda. Metoda koja se koristi za dohvaćanje novih podataka je \texttt{fetch\_data()} te ona poziva \texttt{self.twitter\_api.search\_tweets(username, since\_id)} ako je korisnik kao vrstu pretrage odabrao \textit{hashtag}, dok se u slučaju vrste pretrage \textit{tweet} poziva metoda \texttt{self.twitter\_api.search\_hashtags(hashtag, since\_id)}. Nakon što se podaci dohvate, isti se šalju agentu izvjestitelju.
 
-Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod pokretanja kod metode \texttt{onStart()} šalje poruka registracije agentu izvjestitelju o Twitter agentu pomoću metode \texttt{\_\_send\_registration\_message()}  kako bi agent izvjestitelj mogao voditi evidenciju o njemu i njegovim podacima. U svakom periodu u metodi \texttt{\_onTick()} provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti se šalje zahtjev za provjerom da li se na Twitter servisu što promijenilo od zadnje provjere. Ovdje je važno spomenuti da se na temelju korisničkog unosa odnosno definiranja pretrage šalje različiti zahtjev, tj. poziva se različita metoda. Metoda koja se koristi za dohvaćanje novih podataka je \texttt{fetch\_data()} te ona poziva \texttt{self.twitter\_api.search\_tweets(username, since\_id)} ako je korisnik kao vrstu pretrage odabrao \textit{hashtag}, dok se u slučaju vrste pretrage \textit{tweet} poziva metoda \texttt{self.twitter\_api.search\_hashtags(hashtag, since\_id)}. Nakon što se podaci dohvate, isti se šalju agentu izvjestitelju.
-
-\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} // TODO... 
-
-Sastoji se od samo jedne metode koja je definirana nadklasom \texttt{EventBehaviour}, a radi na način da očekuje poruku od agenta izvjestitelja, a kada ju dobije ju ispiše na ekran i završi s radom agenta.
+\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour}. Sastoji se od samo jedne metode koja je definirana nadklasom \texttt{EventBehaviour}, a radi na način da očekuje poruku od agenta izvjestitelja, a kada ju dobije ju ispiše na ekran i završi s radom agenta.
 
 Konačno, sam agent \texttt{TwitterAgent} nasljeđuje klasu \texttt{Agent} te se time definiraju konstruktor i metoda \texttt{\_setup()}. Konstruktor je u ovom slučaju definiran drugačije od zadanog, pa je potrebno ručno pozvati konstuktor i proslijediti potrebne podatke. Podaci koje je potrebno proslijediti jesu korisničko ime i lozinka agenta, a to se generira pomoću metode \texttt{\_\_generate\_agent\_credentails()}.
 

@@ -2,7 +2,7 @@
 \contentsline {chapter}{\numberline {1}Uvod}{1}{chapter.1}
 \contentsline {chapter}{\numberline {2}Opis zadatka}{2}{chapter.2}
 \contentsline {section}{\numberline {2.1}Koncept zadatka}{2}{section.2.1}
-\contentsline {section}{\numberline {2.2}Prikaz znanstvenih \IeC {\v c}lanaka ili neki naziv cool :) teorijsko ne\IeC {\v s}to :D}{3}{section.2.2}
+\contentsline {section}{\numberline {2.2}Vi\IeC {\v s}eagentni sustavi i njihova primjena u dru\IeC {\v s}tvenim mre\IeC {\v z}ama}{3}{section.2.2}
 \contentsline {chapter}{\numberline {3}Implementacija rje\IeC {\v s}enja}{4}{chapter.3}
 \contentsline {section}{\numberline {3.1}Implementacija Facebook agenta}{4}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}Prikaz implementacije modela}{4}{subsection.3.1.1}
@@ -14,6 +14,6 @@
 \contentsline {subsection}{\numberline {3.2.3}Prikaz implementacije reaktivnog agenta}{13}{subsection.3.2.3}
 \contentsline {section}{\numberline {3.3}Implementacija agenta za izvje\IeC {\v s}taje}{17}{section.3.3}
 \contentsline {section}{\numberline {3.4}Implementacija kreiranja agenata}{20}{section.3.4}
-\contentsline {chapter}{\numberline {4}Demonstracija rje\IeC {\v s}enja}{23}{chapter.4}
-\contentsline {chapter}{\numberline {5}Zaklju\IeC {\v c}ak}{28}{chapter.5}
-\contentsline {chapter}{Bibliografija}{28}{chapter.5}
+\contentsline {chapter}{\numberline {4}Demonstracija rje\IeC {\v s}enja}{24}{chapter.4}
+\contentsline {chapter}{\numberline {5}Zaklju\IeC {\v c}ak}{29}{chapter.5}
+\contentsline {chapter}{Bibliografija}{29}{chapter.5}
