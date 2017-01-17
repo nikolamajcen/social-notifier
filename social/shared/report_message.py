@@ -6,7 +6,9 @@ from datetime import datetime
 
 class ReportMessage:
 
-    def __init__(self, network=None, message_type=None, keyword=None, username=None, name=None, date=None, text=None):
+    def __init__(self, network=None, message_type=None,
+                 keyword=None, username=None,
+                 name=None, date=None, text=None):
         self.network = network
         self.message_type = message_type
         self.keyword = keyword
@@ -28,7 +30,8 @@ class ReportMessage:
         self.text = data["text"]
 
     def print_message(self):
-        print "network=" + self.network + "; type=" + self.message_type + "; keyword=" + self.keyword
+        print "network=" + self.network + "; type="
+            + self.message_type + "; keyword=" + self.keyword
         print "username=" + self.username + "; name=" + self.name
         print "date=" + self.date
         if self.text == "":

@@ -21,25 +21,59 @@ class SocialNotifier:
         subparsers = parser.add_subparsers(dest="command")
 
         # Reporter
-        reporter_parser = subparsers.add_parser("reporter", help="Creates social reporter")
-        reporter_parser.add_argument("-config", default="config.json", action="store", help="Configuration filename")
+        reporter_parser = subparsers.add_parser("reporter",
+                                                help="Creates social reporter")
+        reporter_parser.add_argument("-config",
+                                     default="config.json",
+                                     action="store",
+                                     help="Configuration filename")
 
         # Twitter
-        twitter_parser = subparsers.add_parser("twitter", help="Creates a Twitter fetch agent")
-        twitter_parser.add_argument("keyword", action="store", help="Defines search keyword (username or hashtag)")
-        twitter_parser.add_argument("type", action="store", help="Defines search type ('tweet' or 'hashtag')")
-        twitter_parser.add_argument("-credentials", default="credentials.json", action="store", help="Credentials filename")
-        twitter_parser.add_argument("-config", default="config.json", action="store", help="Configuration filename")
-        twitter_parser.add_argument("-time", default=120, action="store", help="Length of agent lifetime in secods", type=int)
-        twitter_parser.add_argument("-period", default=15, action="store", help="Lenght of period in seconds", type=int)
+        twitter_parser = subparsers.add_parser("twitter",
+                                               help="Creates a Twitter fetch agent")
+        twitter_parser.add_argument("keyword",
+                                    action="store",
+                                    help="Defines search keyword (username or hashtag)")
+        twitter_parser.add_argument("type",
+                                    action="store",
+                                    help="Defines search type ('tweet' or 'hashtag')")
+        twitter_parser.add_argument("-credentials",
+                                    default="credentials.json",
+                                    action="store",
+                                    help="Credentials filename")
+        twitter_parser.add_argument("-config",
+                                    default="config.json",
+                                    action="store",
+                                    help="Configuration filename")
+        twitter_parser.add_argument("-time", default=120, action="store",
+                                    help="Length of agent lifetime in secods",
+                                    type=int)
+        twitter_parser.add_argument("-period", default=15, action="store",
+                                    help="Lenght of period in seconds",
+                                    type=int)
 
         # Facebook
-        facebook_parser = subparsers.add_parser("facebook", help="Creates a Facebook fetch agent")
-        facebook_parser.add_argument("keyword", action="store", help="Defines search keyword (username)")
-        facebook_parser.add_argument("-credentials", default="credentials.json", action='store', help="Credentials filename")
-        facebook_parser.add_argument("-config", default="config.json", action="store", help="Configuration filename")
-        facebook_parser.add_argument("-time", default=120, help="Length of agent lifetime in secods", type=int)
-        facebook_parser.add_argument("-period", default=15, help="Lenght of period in seconds", type=int)
+        facebook_parser = subparsers.add_parser("facebook",
+                                                help="Creates a Facebook fetch agent")
+        facebook_parser.add_argument("keyword",
+                                     action="store",
+                                     help="Defines search keyword (username)")
+        facebook_parser.add_argument("-credentials",
+                                     default="credentials.json",
+                                     action='store',
+                                     help="Credentials filename")
+        facebook_parser.add_argument("-config",
+                                     default="config.json",
+                                     action="store",
+                                     help="Configuration filename")
+        facebook_parser.add_argument("-time",
+                                     default=120,
+                                     help="Length of agent lifetime in secods",
+                                     type=int)
+        facebook_parser.add_argument("-period",
+                                     default=15,
+                                     help="Lenght of period in seconds",
+                                     type=int)
 
         result = parser.parse_args()
         if not path.isfile(result.config):
@@ -67,12 +101,16 @@ class SocialNotifier:
 
     def __start_twitter_fetch(self, result):
         reporter_name, _ = self.__read_config_file(result.config)
-        agent = TwitterFetchAgent(reporter_name, result.keyword, result.type, result.credentials, result.time, result.period)
+        agent = TwitterFetchAgent(reporter_name, result.keyword,
+                                  result.type, result.credentials,
+                                  result.time, result.period)
         agent.start()
 
     def __start_facebook_fetch(self, result):
         reporter_name, _ = self.__read_config_file(result.config)
-        agent = FacebookAgent(reporter_name, result.keyword, result.credentials, result.time, result.period)
+        agent = FacebookAgent(reporter_name, result.keyword,
+                              result.credentials, result.time,
+                              result.period)
         agent.start()
 
     def __read_config_file(self, filename):

@@ -22,7 +22,8 @@ class FacebookStatus:
         self.name = None
         self.username = None
         self.status_type = data["status_type"]
-        self.date = datetime.strptime(data["updated_time"], "%Y-%m-%dT%H:%M:%S+0000")
+        self.date = datetime.strptime(data["updated_time"],
+                                      "%Y-%m-%dT%H:%M:%S+0000")
         if "message" in data:
             self.message = data["message"].strip()
         else:

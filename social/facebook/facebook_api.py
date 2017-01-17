@@ -20,7 +20,8 @@ class FacebookAPI:
             return None
 
         graph = facebook.GraphAPI(access_token=self.access_token)
-        batched_requests = '[{"method": "GET", "relative_url": "' + user_id + '/feed"}]'
+        batched_requests = '[{"method": "GET", "relative_url": "'
+                            + user_id + '/feed"}]'
 
         try:
             posts_data = graph.request("", post_args={"batch": batched_requests})
@@ -42,7 +43,8 @@ class FacebookAPI:
 
     def __fetch_user_details(self, username):
         graph = facebook.GraphAPI(access_token=self.access_token)
-        batched_requests = '[ {"method": "GET", "relative_url":  "' + username + '"} ]'
+        batched_requests = '[ {"method": "GET", "relative_url":  "'
+                            + username + '"} ]'
         try:
             user_data = graph.request("", post_args={"batch": batched_requests})
         except:

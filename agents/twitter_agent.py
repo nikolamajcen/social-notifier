@@ -26,11 +26,15 @@ class TwitterFetchAgent(Agent.Agent):
             self.twitter_api = TwitterAPI(twitter_credentials.get_credentials())
 
         def onStart(self):
-            print "[" + self.myAgent.getName() + "] " + self.myAgent.fetch_type.capitalize() + " activity fetch started."
+            print "[" + self.myAgent.getName() + "] "
+                + self.myAgent.fetch_type.capitalize()
+                + " activity fetch started."
             self.__send_registration_message()
 
         def onEnd(self):
-            print "[" + self.myAgent.getName() + "] " + self.myAgent.fetch_type.capitalize() + " activity fetch ended."
+            print "[" + self.myAgent.getName() + "] "
+                + self.myAgent.fetch_type.capitalize()
+                + " activity fetch ended."
             self.__send_report_message()
 
         def _onTick(self):
@@ -42,10 +46,14 @@ class TwitterFetchAgent(Agent.Agent):
 
         def fetch_data(self):
             if self.myAgent.fetch_type == "tweet":
-                print "[" + self.myAgent.getName() + "] Fetching tweets... (No. of periods left: " + str(self.periods) + ")"
+                print "[" + self.myAgent.getName()
+                    + "] Fetching tweets... (No. of periods left: "
+                    + str(self.periods) + ")"
                 results = self.twitter_api.search_tweets(self.myAgent.keyword)
             else:
-                print "[" + self.myAgent.getName() + "] Fetching hashtags... (No. of periods left: " + str(self.periods) + ")"
+                print "[" + self.myAgent.getName()
+                    + "] Fetching hashtags... (No. of periods left: "
+                    + str(self.periods) + ")"
                 results = self.twitter_api.search_hashtag(self.myAgent.keyword)
 
             tweets_found = 0
@@ -54,7 +62,8 @@ class TwitterFetchAgent(Agent.Agent):
                     self.current_date = tweet.date
                     self.__send_tweet_message(tweet)
                     tweets_found += 1
-            print "[" + self.myAgent.getName() + "] Found " + self.myAgent.fetch_type + "s: " + str(tweets_found)
+            print "[" + self.myAgent.getName() + "] Found "
+                + self.myAgent.fetch_type + "s: " + str(tweets_found)
 
         def __send_registration_message(self):
             message = ACLMessage.ACLMessage()
@@ -67,8 +76,10 @@ class TwitterFetchAgent(Agent.Agent):
             message = ACLMessage.ACLMessage()
             message.addReceiver(self.myAgent.receiver)
             message.setOntology("notify")
-            object = ReportMessage("Twitter", self.myAgent.fetch_type, self.myAgent.keyword,
-                                   tweet.username, tweet.name, tweet.date, tweet.text)
+            object = ReportMessage("Twitter", self.myAgent.fetch_type,
+                                   self.myAgent.keyword,
+                                   tweet.username, tweet.name,
+                                   tweet.date, tweet.text)
             value = json.dumps(object.__dict__)
             message.setContent(value)
             self.myAgent.send(message)
@@ -87,8 +98,12 @@ class TwitterFetchAgent(Agent.Agent):
             if received_message:
                 content = json.loads(received_message.getContent())
                 print ""
-                print "[" + self.myAgent.getName() + "] Received message from: " + received_message.getSender().getName()
-                print "[" + self.myAgent.getName() + "] Total number of fetched data: " + str(len(content))
+                print "[" + self.myAgent.getName()
+                    + "] Received message from: "
+                    + received_message.getSender().getName()
+                print "[" + self.myAgent.getName()
+                    + "] Total number of fetched data: "
+                    + str(len(content))
                 print ""
                 for element in content:
                     notify_message = ReportMessage()
@@ -105,17 +120,19 @@ class TwitterFetchAgent(Agent.Agent):
         self.credentials_filename = credentials_filename
         self.time = time
         self.period = period
-        self.receiver = AID.aid(name=reporter_name, addresses=["xmpp://" + reporter_name])
+        self.receiver = AID.aid(name=reporter_name,
+                                addresses=["xmpp://" + reporter_name])
 
     def _setup(self):
         print "[" + self.getName() + "] Twitter fetch agent is starting..."
-        fetch_behaviour = self.FetchBehaviour(self.time, self.period, self.credentials_filename)
+        fetch_behaviour = self.FetchBehaviour(self.time, self.period,
+                                              self.credentials_filename)
         self.addBehaviour(fetch_behaviour)
-
         delivery_template = Behaviour.ACLTemplate()
         delivery_template.setOntology("report_delivery")
         self.addBehaviour(self.ReportDeliveryBehaviour(), delivery_template)
 
     def __generate_agent_credentials(self):
-        agent_name = "twitter_" + datetime.now().strftime("%H%M%S") + "@127.0.0.1"
+        agent_name = "twitter_" + datetime.now().strftime("%H%M%S")
+                    + "@127.0.0.1"
         return agent_name, "secret"

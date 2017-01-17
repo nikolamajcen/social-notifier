@@ -9,11 +9,11 @@
 \contentsline {subsection}{\numberline {3.1.2}Prikaz implementacije API-a}{8}{subsection.3.1.2}
 \contentsline {subsection}{\numberline {3.1.3}Prikaz implementacije reaktivnog agenta}{10}{subsection.3.1.3}
 \contentsline {section}{\numberline {3.2}Implementacija Twitter agenta}{13}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Prikaz implementacije modela}{13}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Prikaz implementacije API-a}{14}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Prikaz implementacije reaktivnog agenta}{15}{subsection.3.2.3}
-\contentsline {section}{\numberline {3.3}Implementacija agenta za izvje\IeC {\v s}taje}{19}{section.3.3}
-\contentsline {section}{\numberline {3.4}Implementacija kreiranja agenata}{22}{section.3.4}
-\contentsline {chapter}{\numberline {4}Demonstracija rje\IeC {\v s}enja}{26}{chapter.4}
-\contentsline {chapter}{\numberline {5}Zaklju\IeC {\v c}ak}{31}{chapter.5}
-\contentsline {chapter}{Bibliografija}{31}{chapter.5}
+\contentsline {subsection}{\numberline {3.2.1}Prikaz implementacije modela}{14}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Prikaz implementacije API-a}{15}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Prikaz implementacije reaktivnog agenta}{16}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.3}Implementacija agenta za izvje\IeC {\v s}taje}{20}{section.3.3}
+\contentsline {section}{\numberline {3.4}Implementacija kreiranja agenata}{23}{section.3.4}
+\contentsline {chapter}{\numberline {4}Demonstracija rje\IeC {\v s}enja}{28}{chapter.4}
+\contentsline {chapter}{\numberline {5}Zaklju\IeC {\v c}ak}{33}{chapter.5}
+\contentsline {chapter}{Bibliografija}{33}{chapter.5}

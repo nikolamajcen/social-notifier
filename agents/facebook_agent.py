@@ -23,14 +23,17 @@ class FacebookAgent(Agent.Agent):
             self.periods = time / period
             self.current_date = datetime.now()
             facebook_credentials = FacebookCredentials(credentials_filename)
-            self.facebook_api = FacebookAPI(facebook_credentials.get_credentials())
+            self.facebook_api = FacebookAPI(facebook_credentials
+                                            .get_credentials())
 
         def onStart(self):
-            print "[" + self.myAgent.getName() + "] Status activity fetch started."
+            print "[" + self.myAgent.getName()
+                + "] Status activity fetch started."
             self.__send_registration_message()
 
         def onEnd(self):
-            print "[" + self.myAgent.getName() + "] Status activity fetch ended."
+            print "[" + self.myAgent.getName()
+                + "] Status activity fetch ended."
             self.__send_report_message()
 
         def _onTick(self):
@@ -41,7 +44,9 @@ class FacebookAgent(Agent.Agent):
                 self.kill()
 
         def fetch_data(self):
-            print "[" + self.myAgent.getName() + "] Fetching statuses... (No. of periods left: " + str(self.periods) + ")"
+            print "[" + self.myAgent.getName()
+                + "] Fetching statuses... (No. of periods left: "
+                + str(self.periods) + ")"
             results = self.facebook_api.search_posts(self.myAgent.keyword)
 
             statuses_found = 0
@@ -50,7 +55,8 @@ class FacebookAgent(Agent.Agent):
                     self.current_date = status.date
                     self.__send_status_message(status)
                     statuses_found += 1
-            print "[" + self.myAgent.getName() + "] Found statuses: " + str(statuses_found)
+            print "[" + self.myAgent.getName()
+                + "] Found statuses: " + str(statuses_found)
 
         def __send_registration_message(self):
             message = ACLMessage.ACLMessage()
@@ -63,8 +69,12 @@ class FacebookAgent(Agent.Agent):
             message = ACLMessage.ACLMessage()
             message.addReceiver(self.myAgent.receiver)
             message.setOntology("notify")
-            object = ReportMessage("Facebook", post.status_type, self.myAgent.keyword,
-                                   post.username, post.name, post.date, post.message + " (" + post.link + ")")
+            object = ReportMessage("Facebook",
+                                   post.status_type,
+                                   self.myAgent.keyword,
+                                   post.username,
+                                   post.name, post.date,
+                                   post.message + " (" + post.link + ")")
             value = json.dumps(object.__dict__)
             message.setContent(value)
             self.myAgent.send(message)
@@ -83,8 +93,12 @@ class FacebookAgent(Agent.Agent):
             if received_message:
                 content = json.loads(received_message.getContent())
                 print ""
-                print "[" + self.myAgent.getName() + "] Received message from: " + received_message.getSender().getName()
-                print "[" + self.myAgent.getName() + "] Total number of fetched data: " + str(len(content))
+                print "[" + self.myAgent.getName()
+                    + "] Received message from: "
+                    + received_message.getSender().getName()
+                print "[" + self.myAgent.getName()
+                    + "] Total number of fetched data: "
+                    + str(len(content))
                 print ""
                 for element in content:
                     notify_message = ReportMessage()
@@ -92,24 +106,29 @@ class FacebookAgent(Agent.Agent):
                     notify_message.print_message()
             self.myAgent.stop()
 
-    def __init__(self, reporter_name, keyword, credentials_filename="credentials.json", time=60, period=10):
+    def __init__(self, reporter_name, keyword,
+                 credentials_filename="credentials.json",
+                 time=60, period=10):
         agent_id, password = self.__generate_agent_credentials()
         Agent.Agent.__init__(self, agent_id, password)
         self.keyword = keyword
         self.credentials_filename = credentials_filename
         self.time = time
         self.period = period
-        self.receiver = AID.aid(name=reporter_name, addresses=["xmpp://" + reporter_name])
+        self.receiver = AID.aid(name=reporter_name,
+                                addresses=["xmpp://" + reporter_name])
 
     def _setup(self):
         print "[" + self.getName() + "] Facebook fetch agent is starting..."
-        fetch_behaviour = self.FetchBehaviour(self.time, self.period, self.credentials_filename)
+        fetch_behaviour = self.FetchBehaviour(self.time,
+                                              self.period,
+                                              self.credentials_filename)
         self.addBehaviour(fetch_behaviour)
-
         delivery_template = Behaviour.ACLTemplate()
         delivery_template.setOntology("report_delivery")
         self.addBehaviour(self.ReportDeliveryBehaviour(), delivery_template)
 
     def __generate_agent_credentials(self):
-        agent_name = "facebook_" + datetime.now().strftime("%H%M%S") + "@127.0.0.1"
+        agent_name = "facebook_" + datetime.now().strftime("%H%M%S")
+                    + "@127.0.0.1"
         return agent_name, "secret"
