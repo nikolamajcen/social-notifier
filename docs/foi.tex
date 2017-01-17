@@ -70,12 +70,75 @@ Pretplata na promjenu statusa ili praćenje statusa sa određenim hashtag-om odv
 
 Za implementaciju rješenja ovog zadatka koristio sam višeagentni sustav koji se sastoji od dva, odnosno tri reaktivna agenta. Dva reaktivna agenta omogućuju pretraživanje i praćenje promjena na društvenim mrežama, a skupljene podatke šalju trećem agentu koji dohvaća sve promjene svih agenata. Za svaku društvenu mrežu definiran je posebni agent koji koristi specifične načine dohvata podataka za svaku od društvenih mreža. Nakon što određeni agent za dohvaćanje podataka s društvene mreže završi s radom, treći agent (koji sakuplja podatke) šalje izvještaj u obliku svih sakupljenih podataka koje mu je taj agent poslao. Na taj način završava praćenje i izvještavanje za tog agenta, dok svi ostali nastavljaju s radom.
 
-\section{Višeagentni sustavi i njihova primjena u društvenim mrežama}
+\section{Višeagentni sustavi i primjena u društvenim mrežama}
+
+U današnje vrijeme, društvene mreže su svuda oko nas. Gotovo da i ne postoji osoba koja nije barem jednom koristila društvenu mrežu te imala određene aktivnosti na istoj. Zbog velike količine podataka na društvenim mrežama, ponekad je vrlo teško pratiti sadržaj koji se kreće po navedenim mrežama.
+
+Sve društvene mreže dijele četiri karakteristike \citep{Lerman2008}:
+
+\begin{itemize}
+\item{Korisnici kreiraju ili doprinose određenom sadržaju}
+\item{Korisnici bilježe sadržaj sa oznakama (engl.tag)}
+\item{Korisnici ocjenjuju ili komentiraju navedeni sadržaj}
+\item{Korisnici stvaraju veze sa drugim poznanicima ili osobama istih 	interesa}
+\end{itemize}
+
+Radi kreiranja tolike količine sadržaja, ponekad je vrlo teško uopće primijetiti pojedini sadržaj na mreži, jer zbog manjka komentara ili ocjena, sadržaj pojedinog korisnika vrlo brzo odlazi sa glavne stranice (engl. front page) ili određenog dijela stranice gdje se nalazi popularan sadržaj.
+
+Većina društvenih mreža funkcionira upravo na takav način (Facebook, Twitter, LinkedIn, Digg...), a upravo se kao jedan od primjera ovdje također spominje Digg \citep{Lerman2008}. Da bi se to izbjeglo, kreiraju se razni algoritmi kako bi sadržaj ostao vidljiv korisnicima koji zapravo žele doprijeti do njega te ga vidjeti, a jedan od primjera kako je to implementirano je Facebook, gdje je moguće postaviti razlićite vrste prikaza novih vijesti odnosno aktivnosti korisnika.
+
+Ipak, u ovome slučaju, cilj nije oponašanje korisnika niti evaluacija algoritama kako društvene mreže funkcioniraju, već je cilj vidjeti na koji način je moguće filtriranje ali i agregacija pojedinih sadržaja društvenih mreža. Ranije je već spomenuto kako društvene mreže generiraju veliku količinu sadržaja, a upravo taj sadržaj postaje zanimljiv ukoliko je moguće kreirati sustav koji može pratiti te filtrirati podatke te generirati određene statistike pa i informacije iz obrađenih podataka.
+
+Jedan od načina na koji je moguće pratiti izvore podataka te ih obrađivati jest korištenje višeagentnih sustava. Višeagentni sustav predstavlja niz agenata koji su u međusobnoj interakciji, a definiranjem agenata, oni će raditi u skladu s ciljevima i zadacima na temelju kojih su definirani [REF]. 
+
+Sljedeći prethodno navedeno, jedan od načina za takvo prikupljanje podataka te njihovu analizu jest kompozicijsko modeliranje višeagentnih sustava (engl. Compositional Modelling of Multi-Agent Systems) \citep{JonkerTreur2002}. Ovaj princip sastoji od sljedeća tri elementa:
+
+\begin{itemize}
+\item{kompozicije procesa,}
+\item{kompozicije znanja,}
+\item{veze između kompozicije procesa i kompozicije znanja.}
+\end{itemize}
+
+Kompozicija procesa identificira relevantne procese za različite razine apstrakcije te prikazuje kako proces može biti definiran pomoću procesa niže razine.
+
+Kompozicija znanja identificira strukture znanja za razlićite razine apstrakcije te definira kako se navedena struktura znanja može definirati pomoću znanja niže razine. Osnovni građevni blokovi strukture znanja su informacijski tipovi i baze znanja, gdje informacijski tipovi definiraju ontologiju pomoću kojih se definiraju objekti, dok baze znanja definiraju znanje koje se koristi u jednom ili više procesa.
+
+Veza između kompozicije procesa i znanje je vidljiva u tome što svaki proces koristi strukture znanja za određenu akciju odnosno aktivnost.
+
+Na temelju navedenog, definiraju se moduli koji sadrže određena svojstva, i to svojstva ponašanja i okoline. Svojstva ponašanja se nalaze na izlazu komponente	 te mogu imati definirane uvjete koji jesu ili nisu ispunjeni, ovisno o ulazu, te na temelju toga kreiraju određen izlaz. S druge strane, svostva okoline definirana su na ulazu komponente za dohvat određenih parametara koji se kasnije procesuiraju \citep{JonkerTreur2002}.	
+
+S ovim pristupom dolazi se do ideje da se sustav podijeli na komponente, odnosno da se definiraju zasebni agenti koji rade samo određenu akciju, gdje se na ulazu dobiju određeni podaci koji se kasnije procesuiraju, a na kraju agent, u ovom slučaju kao komponenta sustava, na izlazu daje rezultat kao ulaz sljedećem agentu.
 
 
+Da bi svaki pojedini agent mogao izvršavati svoje zadatke, isti se mora sastojati od četiri osnovne komponente koje se mogu vidjeti na slici 2.1.
 
-\citep{ArandaPalanca2012} \citep{JonkerTreur2002} \citep{Lerman2008}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{00-composition-relation}
+	\caption{Kompozicija odnosa unutar agenta \citep{JonkerTreur2002}}
+\end{figure}
 
+Klasifikacija objekta (engl. Object Classification) je komponenta koja definira specifičnu akciju agenta. Upravljanje interakcijom sa svijetom (engl. World Interaction Management) je komponenta koja definira kako će agent biti u interakciji sa vanjskim svijetom. Upravljanje interakcijom agenta (engl. Agent Interaction Management) definira kako će agent komunicirati sa ostalim agentima u sustavu, dok kontrola vlastitog procesa (engl. Own Process Control) definira ponašanje i svojstva samog agenta. Agent u smislu ponašanja može biti proaktivan ili reaktivan.
+
+Proaktivno ponašanje agenta ima sljedeće karakteristike:
+
+\begin{itemize}
+\item{motrenje,}
+\item{komuniciranje o opažanju s drugim agentima,}
+\item{traženje rezultata motrenja od drugih agenata,}
+\item{definiranje zaključaka o klasifikaciji objekata}
+\end{itemize}
+
+dok reaktivno ponašanje agenta u smislu odgovora na zahtjev definira sljedeće:
+
+\begin{itemize}
+\item{komuniciranje o rezultatima motrenja u čim kraćem vremenu (čim su rezultati dosupni),}
+\item{početak praćenja drugih agenata.}
+\end{itemize}
+
+Prema navedenom, definiran je zadatak koji će pokušati na jednostavan način prikazati kako se uz korištenje društvenih mreža i velike količine podataka, uz kreiranje reaktivnih agenata može jednostavno prikupiti ciljana skupina podataka uz njihovu suradnju i podjelu na manje procese te filtiranje rezultata.
+
+U ovom radu će agenti biti definirani kao reaktivni agenti, odnosno agenti odlučuju o svojim akcijama bez razmatranja prošlosti tj. donose odluke na temelju trenutnog stanja okruženja [REF], te će u interakciji između sebe dohvaćati podatke iz vanjskog svijeta (društvene mreže), te iste dobavljati glavnom agentu (izvjestitelju).
 
 % Implementacija rješenja
 
@@ -144,7 +207,7 @@ Ovdje ću prikazati konačnu implementaciju agenta koji na Facebook društvenoj 
 
 Agent ima dvije podklase koje definiraju ponašanje agenta, a to su \textit{FetchBehaviour} i \textit{ReportDeliveryBehaviour}.
 
-\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} a ono funkcionira na način da u određenim vremenskim intervalima pokreće metodu \texttt{\_onTick()}. Vrijeme između dva pokretanja navedene metode definira se putem konstruktora klase \texttt{PeriodicBehaviour}. 
+\texttt{FetchBehaviour} je ponašanje koje je definirano kao \texttt{PeriodicBehaviour} a ono funkcionira na način da u određenim vremenskim intervalima pokreće metodu \texttt{\_onTick()}. Vrijeme između dva pokretanja navedene metode definira se putem konstruktora klase \texttt{PeriodicBehaviour} \citep{ArandaPalanca2012}. 
 
 Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod metode pokretanja \texttt{onStart()} šalje poruka registracije agentu izvjestitelju o Facebook agentu pomoću metode \texttt{\_\_send\_registration\_message()}. Na taj način agent izvjestitelj vodi evidenciju o prijavljenom agentu i njegovim podacima. U svakom periodu provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti, kada je broj perioda veći od 0, šalje se zahtjev za dohvaćanjem podataka sa Facebook servisa te se provjerava što promijenilo od zadnje provjere. To je omogućeno pomoću metode \texttt{fetch\_data()}. Nakon dohvaćanja podataka, ukoliko je bilo kakve promjene, dohvaćeni podaci se šalju agentu izvjestitelju pomoću metode \texttt{\_\_send\_status\_message()} te se tamo spremaju za daljnje korištenje.
 
