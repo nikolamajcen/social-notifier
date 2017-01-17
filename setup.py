@@ -6,7 +6,7 @@ from distutils.core import setup
 setup(
     name='social-notifier',
     version='1.0',
-    packages=['api', 'credentials', 'models'],
+    packages=['agents’, ‘social’],
     url='https://nikolamajcen.com',
     license='',
     author='Nikola Majcen',
