@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{4}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Catholijn M.~Jonker(2002)}]{JonkerTreur2002}
@@ -15,5 +15,10 @@ G.~Aranda, J.P., 2012.
 \bibitem[{Lerman(2008)}]{Lerman2008}
 Lerman, K., 2008.
 \newblock \emph{Social Information Processing in Social News Aggregation}.
+
+\bibitem[{Schatten(2016)}]{Schatten2016}
+Schatten, M., 2016.
+\newblock \emph{Materijali s predavanja}.
+\newblock Available at \url{https://elf.foi.hr/course/view.php?id=292}.
 
 \end{thebibliography}

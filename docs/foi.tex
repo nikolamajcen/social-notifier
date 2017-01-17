@@ -87,9 +87,9 @@ Radi kreiranja tolike količine sadržaja, ponekad je vrlo teško uopće primije
 
 Većina društvenih mreža funkcionira upravo na takav način (Facebook, Twitter, LinkedIn, Digg...), a upravo se kao jedan od primjera ovdje također spominje Digg \citep{Lerman2008}. Da bi se to izbjeglo, kreiraju se razni algoritmi kako bi sadržaj ostao vidljiv korisnicima koji zapravo žele doprijeti do njega te ga vidjeti, a jedan od primjera kako je to implementirano je Facebook, gdje je moguće postaviti razlićite vrste prikaza novih vijesti odnosno aktivnosti korisnika.
 
-Ipak, u ovome slučaju, cilj nije oponašanje korisnika niti evaluacija algoritama kako društvene mreže funkcioniraju, već je cilj vidjeti na koji način je moguće filtriranje ali i agregacija pojedinih sadržaja društvenih mreža. Ranije je već spomenuto kako društvene mreže generiraju veliku količinu sadržaja, a upravo taj sadržaj postaje zanimljiv ukoliko je moguće kreirati sustav koji može pratiti te filtrirati podatke te generirati određene statistike pa i informacije iz obrađenih podataka.
+Ipak, u ovome slučaju, cilj nije oponašanje korisnika niti evaluacija algoritama kako društvene mreže funkcioniraju, već je cilj vidjeti na koji način je moguće filtriranje ali i agregacija pojedinih sadržaja društvenih mreža. Ranije je već spomenuto kako društvene mreže generiraju veliku količinu sadržaja, a upravo taj sadržaj postaje zanimljiv ukoliko je moguće kreirati sustav koji može pratiti i filtrirati podatke te generirati određene statistike pa i informacije iz obrađenih podataka.
 
-Jedan od načina na koji je moguće pratiti izvore podataka te ih obrađivati jest korištenje višeagentnih sustava. Višeagentni sustav predstavlja niz agenata koji su u međusobnoj interakciji, a definiranjem agenata, oni će raditi u skladu s ciljevima i zadacima na temelju kojih su definirani [REF]. 
+Jedan od načina na koji je moguće pratiti izvore podataka te ih obrađivati jest korištenje višeagentnih sustava. Višeagentni sustav predstavlja niz agenata koji su u međusobnoj interakciji, a definiranjem agenata, oni će raditi u skladu s ciljevima i zadacima na temelju kojih su definirani \citep{Schatten2016}. 
 
 Sljedeći prethodno navedeno, jedan od načina za takvo prikupljanje podataka te njihovu analizu jest kompozicijsko modeliranje višeagentnih sustava (engl. Compositional Modelling of Multi-Agent Systems) \citep{JonkerTreur2002}. Ovaj princip sastoji od sljedeća tri elementa:
 
@@ -103,7 +103,7 @@ Kompozicija procesa identificira relevantne procese za različite razine apstrak
 
 Kompozicija znanja identificira strukture znanja za razlićite razine apstrakcije te definira kako se navedena struktura znanja može definirati pomoću znanja niže razine. Osnovni građevni blokovi strukture znanja su informacijski tipovi i baze znanja, gdje informacijski tipovi definiraju ontologiju pomoću kojih se definiraju objekti, dok baze znanja definiraju znanje koje se koristi u jednom ili više procesa.
 
-Veza između kompozicije procesa i znanje je vidljiva u tome što svaki proces koristi strukture znanja za određenu akciju odnosno aktivnost.
+Veza između kompozicije procesa i znanja je vidljiva u tome što svaki proces koristi strukture znanja za određenu akciju odnosno aktivnost.
 
 Na temelju navedenog, definiraju se moduli koji sadrže određena svojstva, i to svojstva ponašanja i okoline. Svojstva ponašanja se nalaze na izlazu komponente	 te mogu imati definirane uvjete koji jesu ili nisu ispunjeni, ovisno o ulazu, te na temelju toga kreiraju određen izlaz. S druge strane, svostva okoline definirana su na ulazu komponente za dohvat određenih parametara koji se kasnije procesuiraju \citep{JonkerTreur2002}.	
 
@@ -136,9 +136,9 @@ dok reaktivno ponašanje agenta u smislu odgovora na zahtjev definira sljedeće:
 \item{početak praćenja drugih agenata.}
 \end{itemize}
 
-Prema navedenom, definiran je zadatak koji će pokušati na jednostavan način prikazati kako se uz korištenje društvenih mreža i velike količine podataka, uz kreiranje reaktivnih agenata može jednostavno prikupiti ciljana skupina podataka uz njihovu suradnju i podjelu na manje procese te filtiranje rezultata.
+Prema navedenom, definiran je zadatak koji će pokušati na jednostavan način prikazati kako se uz korištenje društvenih mreža i velike količine podataka, uz kreiranje reaktivnih agenata može jednostavno prikupiti ciljana skupina podataka uz njihovu suradnju i podjelu na manje procese te filtiranje rezultata. Određeni agent osim karakteristika reaktivnih agenata, sadržavat će pojedinu karakteristiku proaktivnog agenta, međutim, neće nikako sadržavati sve karakteristike koje opisuju proaktivne agente.
 
-U ovom radu će agenti biti definirani kao reaktivni agenti, odnosno agenti odlučuju o svojim akcijama bez razmatranja prošlosti tj. donose odluke na temelju trenutnog stanja okruženja [REF], te će u interakciji između sebe dohvaćati podatke iz vanjskog svijeta (društvene mreže), te iste dobavljati glavnom agentu (izvjestitelju).
+U ovom radu će agenti biti definirani kao reaktivni agenti, odnosno agenti odlučuju o svojim akcijama bez razmatranja prošlosti tj. donose odluke na temelju trenutnog stanja okruženja \citep{Schatten2016}, te će u interakciji između sebe dohvaćati podatke iz vanjskog svijeta (društvene mreže), te iste dobavljati glavnom agentu (izvjestitelju).
 
 % Implementacija rješenja
 
@@ -211,7 +211,7 @@ Agent ima dvije podklase koje definiraju ponašanje agenta, a to su \textit{Fetc
 
 Sastoji se od metoda koje su definirane od strane nadklase \texttt{PeriodicBehaviour} gdje se kod metode pokretanja \texttt{onStart()} šalje poruka registracije agentu izvjestitelju o Facebook agentu pomoću metode \texttt{\_\_send\_registration\_message()}. Na taj način agent izvjestitelj vodi evidenciju o prijavljenom agentu i njegovim podacima. U svakom periodu provjerava se da li je broj perioda koje je korisnik definirao iskorišten. Ukoliko jest, onda se prelazi iz metode \texttt{\_onTick()} na samo jedno izvršavanje metode \texttt{onEnd()} gdje se agentu izvjestitelju šalje poruka da agent želi dobiti izvješće i to pomoću metode \texttt{\_\_send\_report\_message()}. U suprotnosti, kada je broj perioda veći od 0, šalje se zahtjev za dohvaćanjem podataka sa Facebook servisa te se provjerava što promijenilo od zadnje provjere. To je omogućeno pomoću metode \texttt{fetch\_data()}. Nakon dohvaćanja podataka, ukoliko je bilo kakve promjene, dohvaćeni podaci se šalju agentu izvjestitelju pomoću metode \texttt{\_\_send\_status\_message()} te se tamo spremaju za daljnje korištenje.
 
-\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} što predstavlja ponašanje koje je kreirano na način da se okida na neki događaj. Isto tako, potrebno je napomenuti da ovo ponašanje nije instancirano niti pokrenuto tako dugo dok ga ne okine određen događaj.
+\texttt{ReportDeliveryBehaviour} je ponašanje koje je definirano kao \texttt{EventBehaviour} što predstavlja ponašanje koje je kreirano na način da se okida na neki događaj. Isto tako, potrebno je napomenuti da ovo ponašanje nije instancirano niti pokrenuto tako dugo dok ga ne okine određen događaj \citep{ArandaPalanca2012}.
 
 Sastoji se od metode \texttt{\_process()} koja je definirana nadklasom \texttt{EventBehaviour}, a radi na način da očekuje poruku od agenta izvjestitelja. Kada ju dobije ispiše njen sadržaj na ekran i završi s radom agenta.
 
@@ -288,7 +288,7 @@ Agent je implementiran u klasi \textit{ReportAgent} te ima tri podklase koje def
 
 Sva tri ponašanja definirana su kao \texttt{EventBehaviour}, a nešto više o toj vrsti ponašanja rečeno je u ranijim poglavljima.
 
-\texttt{RegisterBehaviour} se sastoji od metode \texttt{\_process()} koja je definirana od strane nadklase \texttt{EventBehaviour}, a radi na način da dohvaća poruke od strane drugih agenata (Facebook, Twitter) te ih registrira na način da ih spremi u adresar (engl. dictionary). Pošto svaki od agenata ima drugačije ime, adresar je dobar način spremanja pošto ime kao ključ nikad neće biti isto.
+\texttt{RegisterBehaviour} se sastoji od metode \texttt{\_process()} koja je definirana od strane nadklase \texttt{EventBehaviour}, a radi na način da dohvaća poruke od strane drugih agenata (Facebook, Twitter) te ih registrira na način da ih spremi u rječnik (engl. dictionary). Pošto svaki od agenata ima drugačije ime, rječnik je dobar način spremanja pošto ime kao ključ nikad neće biti isto.
 
 \texttt{NotifyBehaviour} se sastoji od metode \texttt{\_process()} koja je definirana od strane nadklase \texttt{EventBehaviour}, a radi na način da dohvaća poruke od strane drugih agenata (Facebook, Twitter). Ukoliko je poruka primljena, poruka se otpakira iz JSON formata u određeni model te se kao takva sprema u rječnik i ispisuje.
 
